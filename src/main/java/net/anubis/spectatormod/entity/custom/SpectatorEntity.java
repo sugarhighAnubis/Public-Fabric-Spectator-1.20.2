@@ -11,16 +11,11 @@ import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SmallFireballEntity;
-import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
@@ -32,11 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
-import java.util.EnumSet;
 
 public class SpectatorEntity extends TameableEntity implements RangedAttackMob{
 
@@ -87,7 +79,7 @@ protected void initGoals(){
       this.goalSelector.add(6, new LookAroundGoal(this));
       this.goalSelector.add(2, new FollowOwnerGoal(this, 1.0, 10.0f, 3.0f, false));
       this.goalSelector.add(0, new SitGoal(this));
-        this.goalSelector.add(1, new ProjectileAttackGoal(this, 1.25, 20, 40.0f));
+        this.goalSelector.add(1, new ProjectileAttackGoal(this, 1.25, 20, 20.0f));
       this.goalSelector.add(0, new SwimGoal(this));
     }
 
@@ -226,18 +218,16 @@ protected void initGoals(){
 
     @Override
     public void shootAt(LivingEntity target, float pullProgress) {
-        ShockwaveProjectileEntity shockwaveProjectileEntity = new ShockwaveProjectileEntity(this.getWorld(), this);
-        double d = target.getEyeY() - (double) 1.1f;
+        ShockwaveEntity shockwaveEntity = new ShockwaveEntity(this.getWorld(), this);
+        double d = target.getEyeY() - (double) 0.5f;
         double e = target.getX() - this.getX();
-        double f = d - shockwaveProjectileEntity.getY();
+        double f = d - shockwaveEntity.getY();
         double g = target.getZ() - this.getZ();
         double h = Math.sqrt(e * e + g * g) * (double) 0.2f;
-        shockwaveProjectileEntity.setVelocity(e, f + h, g, 1.6f, 0.0f);
+        shockwaveEntity.setVelocity(e, f + h, g, 1.6f, 0.0f);
         this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0f, 0.4f / (this.getRandom().nextFloat() * 0.4f + 0.8f));
-        this.getWorld().spawnEntity(shockwaveProjectileEntity);
-        if (target instanceof LivingEntity) {
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 200), this);
-        }
+        this.getWorld().spawnEntity(shockwaveEntity);
+        target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 200), this);
     }
 
     @Nullable

@@ -1,8 +1,7 @@
 package net.anubis.spectatormod.item.custom;
 
-import net.anubis.spectatormod.entity.custom.ShockwaveProjectileEntity;
+import net.anubis.spectatormod.entity.custom.ShockwaveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
@@ -23,10 +22,10 @@ public class ShockwaveItem extends Item {
         ItemStack itemStack = user.getStackInHand(hand);
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClient) {
-            ShockwaveProjectileEntity shockwaveProjectileEntity = new ShockwaveProjectileEntity(user, world);
-            shockwaveProjectileEntity.setItem(itemStack);
-            shockwaveProjectileEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 1.5f, 0f);
-            world.spawnEntity(shockwaveProjectileEntity);
+            ShockwaveEntity shockwaveEntity = new ShockwaveEntity(user, world);
+            shockwaveEntity.setItem(itemStack);
+            shockwaveEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 1.5f, 0f);
+            world.spawnEntity(shockwaveEntity);
         }
 
 

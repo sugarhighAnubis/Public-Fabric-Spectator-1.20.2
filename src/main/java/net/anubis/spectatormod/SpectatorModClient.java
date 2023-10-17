@@ -22,6 +22,6 @@ public class SpectatorModClient implements ClientModInitializer {
 
         ParticleFactoryRegistry.getInstance().register(ModParticles.BLUE_GARNET_PARTICLE, BlueGarnetParticle.Factory::new);
 
-        EntityRendererRegistry.register(ModEntities.THROWN_SHOCKWAVE_PROJECTILE, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SHOCKWAVE, FlyingItemEntityRenderer::new);
     }
 }

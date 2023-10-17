@@ -15,22 +15,19 @@ import net.minecraft.util.Identifier;
 
 import javax.xml.namespace.QName;
 public class ModItems {
-public static final Item SOULCAGE = registerItem("soulcage",new SpawnEggItem(ModEntities.SPECTATOR, 0xF9F9F9,0xF9F9F9, new FabricItemSettings()));
+    public static final Item SOULCAGE = registerItem("soulcage", new SpawnEggItem(ModEntities.SPECTATOR, 0xF9F9F9, 0xF9F9F9, new FabricItemSettings()));
+
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries) {
-
-    entries.add(SOULCAGE);
-    entries.add(SHOCKWAVE);
-}
-
-
-
+        entries.add(SOULCAGE);
+        entries.add(SHOCKWAVE);
+    }
 
     public static Item registerItem(String name, Item item) {
         return Registry.register(Registries.ITEM, new Identifier(SpectatorMod.MOD_ID, name), item);
     }
 
     public static final Item SHOCKWAVE = registerItem("shockwave",
-        new ShockwaveItem(new FabricItemSettings().maxDamage(15)));
+            new ShockwaveItem(new FabricItemSettings().maxDamage(384)));
 
     public static void registerModItems() {
         SpectatorMod.LOGGER.info("Registering Mod Items for " + SpectatorMod.MOD_ID);
