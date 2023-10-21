@@ -22,6 +22,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -71,7 +74,7 @@ public class ShockwaveEntity  extends ThrownItemEntity {
             }
         }
 
-        if (this.age >= 300) {
+        if (this.age >= 200) {
             this.remove(RemovalReason.DISCARDED);
         }
 
@@ -114,18 +117,21 @@ public class ShockwaveEntity  extends ThrownItemEntity {
         }
 
         LivingEntity livingentity = owner instanceof LivingEntity ? (LivingEntity)owner : null;
-        float damage = 2f;
+        float damage = 8f;
         boolean hurt = hitEntity.damage(this.getDamageSources().mobProjectile(this, livingentity), damage);
         if (hurt) {
             if(hitEntity instanceof LivingEntity livingHitEntity) {
                 livingHitEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 200, 1), owner);
+                livingHitEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200, 1), owner);
+                livingHitEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 1), owner);
+
             }
         }
 
         for(int x = 0; x < 18; ++x) {
             for(int y = 0; y < 18; ++y) {
-                this.getWorld().addParticle(ModParticles.BLUE_GARNET_PARTICLE, this.getX(), this.getY(), this.getZ(),
-                        Math.cos(x*20) * 0.15d, Math.cos(y*20) * 0.15d, Math.sin(x*20) * 0.15d);
+                this.getWorld().addParticle(ParticleTypes.SCULK_SOUL, this.getX(), this.getY(), this.getZ(),
+                        Math.cos(x*20) * 0.1d, Math.cos(y*20) * 0.05d, Math.sin(x*20) * 0.1d);
             }
         }
     }
@@ -141,8 +147,8 @@ public class ShockwaveEntity  extends ThrownItemEntity {
 
         for(int x = 0; x < 18; ++x) {
             for(int y = 0; y < 18; ++y) {
-                this.getWorld().addParticle(ModParticles.BLUE_GARNET_PARTICLE, this.getX(), this.getY(), this.getZ(),
-                        Math.cos(x*20) * 0.15d, Math.cos(y*20) * 0.15d, Math.sin(x*20) * 0.15d);
+                this.getWorld().addParticle(ParticleTypes.SCULK_SOUL, this.getX(), this.getY(), this.getZ(),
+                        Math.cos(x*20) * 0.1d, Math.cos(y*20) * 0.05d, Math.sin(x*20) * 0.1d);
             }
         }
     }

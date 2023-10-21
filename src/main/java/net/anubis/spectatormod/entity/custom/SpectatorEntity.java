@@ -72,15 +72,16 @@ public class SpectatorEntity extends TameableEntity implements RangedAttackMob{
 
     @Override
 protected void initGoals(){
-      this.goalSelector.add(1, new AnimalMateGoal(this, 0.5));
-      this.goalSelector.add(3, new TemptGoal(this, 0.5, Ingredient.ofItems(Items.DIAMOND), false));
-      this.targetSelector.add(4, new ActiveTargetGoal<MobEntity>(this, MobEntity.class, 10, true, false, entity -> entity instanceof Monster));
-      this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
-      this.goalSelector.add(6, new LookAroundGoal(this));
-      this.goalSelector.add(2, new FollowOwnerGoal(this, 1.0, 10.0f, 3.0f, false));
-      this.goalSelector.add(0, new SitGoal(this));
-        this.goalSelector.add(1, new ProjectileAttackGoal(this, 1.25, 20, 20.0f));
+      this.goalSelector.add(2, new AnimalMateGoal(this, 0.5));
+      this.goalSelector.add(5, new TemptGoal(this, 0.5, Ingredient.ofItems(Items.DIAMOND), false));
+      this.targetSelector.add(6, new ActiveTargetGoal<MobEntity>(this, MobEntity.class, 10, true, false, entity -> entity instanceof Monster&& !(entity instanceof ZombifiedPiglinEntity)));
+      this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
+      this.goalSelector.add(8, new LookAroundGoal(this));
+      this.goalSelector.add(4, new FollowOwnerGoal(this, 1.0, 10.0f, 3.0f, false));
+      this.goalSelector.add(1, new SitGoal(this));
+      this.goalSelector.add(3, new ProjectileAttackGoal(this, 1.25, 20, 30.0f));
       this.goalSelector.add(0, new SwimGoal(this));
+      this.goalSelector.add(0, new AttackWithOwnerGoal(this));
     }
 
 
@@ -172,7 +173,6 @@ protected void initGoals(){
                 if(!player.getAbilities().creativeMode) {
                     itemStack.decrement(1);
                 }
-
                 if(!this.getWorld().isClient()) {
                     super.setOwner(player);
                     this.navigation.recalculatePath();
@@ -181,12 +181,22 @@ protected void initGoals(){
                     setSitting(true);
                     setInSittingPose(true);
                 }
+            }
+                if (this.isTamed()) {
+                    ActionResult actionResult;
+                    if (this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
+                        if (!player.getAbilities().creativeMode) {
+                            itemStack.decrement(1);
+                        }
+                        this.heal(item.getFoodComponent().getHunger());
+                        return ActionResult.SUCCESS;
+                    }
 
                 return ActionResult.SUCCESS;
             }
         }
 
-        if(isTamed() && hand ==Hand.MAIN_HAND) {
+        if(isTamed() && hand ==Hand.MAIN_HAND && item != itemForTaming && !isBreedingItem(itemStack)) {
             boolean sitting = !isSitting();
             setSitting(sitting);
             setInSittingPose(sitting);
@@ -219,7 +229,7 @@ protected void initGoals(){
     @Override
     public void shootAt(LivingEntity target, float pullProgress) {
         ShockwaveEntity shockwaveEntity = new ShockwaveEntity(this.getWorld(), this);
-        double d = target.getEyeY() - (double) 0.5f;
+        double d = target.getEyeY() - (double) 1.1f;
         double e = target.getX() - this.getX();
         double f = d - shockwaveEntity.getY();
         double g = target.getZ() - this.getZ();
@@ -227,7 +237,6 @@ protected void initGoals(){
         shockwaveEntity.setVelocity(e, f + h, g, 1.6f, 0.0f);
         this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0f, 0.4f / (this.getRandom().nextFloat() * 0.4f + 0.8f));
         this.getWorld().spawnEntity(shockwaveEntity);
-        target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 200), this);
     }
 
     @Nullable

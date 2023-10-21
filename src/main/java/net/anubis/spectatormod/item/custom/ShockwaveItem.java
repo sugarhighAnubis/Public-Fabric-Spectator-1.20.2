@@ -17,6 +17,7 @@ public class ShockwaveItem extends Item {
         super(settings);
     }
 
+
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
