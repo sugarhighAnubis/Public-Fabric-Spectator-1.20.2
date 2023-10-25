@@ -82,6 +82,7 @@ protected void initGoals(){
       this.goalSelector.add(3, new ProjectileAttackGoal(this, 1.25, 20, 30.0f));
       this.goalSelector.add(0, new SwimGoal(this));
       this.goalSelector.add(0, new AttackWithOwnerGoal(this));
+      this.goalSelector.add(9, new WanderAroundFarGoal(this, 1.0));
     }
 
 
