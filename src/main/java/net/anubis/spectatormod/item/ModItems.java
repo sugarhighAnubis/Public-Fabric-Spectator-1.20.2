@@ -27,7 +27,8 @@ public class ModItems {
     }
 
     public static final Item SHOCKWAVE = registerItem("shockwave",
-            new ShockwaveItem(new FabricItemSettings().maxDamage(1024)));
+            new Item(new FabricItemSettings()));
+
 
     public static void registerModItems() {
         SpectatorMod.LOGGER.info("Registering Mod Items for " + SpectatorMod.MOD_ID);
