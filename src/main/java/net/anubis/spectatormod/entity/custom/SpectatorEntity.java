@@ -72,8 +72,8 @@ public class SpectatorEntity extends TameableEntity implements RangedAttackMob{
 
     @Override
 protected void initGoals(){
-      this.goalSelector.add(2, new AnimalMateGoal(this, 0.5));
-      this.goalSelector.add(5, new TemptGoal(this, 0.5, Ingredient.ofItems(Items.DIAMOND), false));
+      this.goalSelector.add(2, new AnimalMateGoal(this, 1));
+      this.goalSelector.add(5, new TemptGoal(this, 1, Ingredient.ofItems(Items.DIAMOND), false));
       this.targetSelector.add(6, new ActiveTargetGoal<MobEntity>(this, MobEntity.class, 10, true, false, entity -> entity instanceof Monster&& !(entity instanceof ZombifiedPiglinEntity)));
       this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
       this.goalSelector.add(8, new LookAroundGoal(this));
@@ -89,8 +89,10 @@ protected void initGoals(){
     public static DefaultAttributeContainer.Builder createSpectatorAttributes(){
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 200)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.3f)
+                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.15f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15f)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 0.5f)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 15);
 
     }
