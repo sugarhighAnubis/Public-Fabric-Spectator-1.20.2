@@ -29,6 +29,8 @@ import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 
 public class SpectatorEntity extends TameableEntity implements RangedAttackMob{
 
@@ -77,7 +79,7 @@ protected void initGoals(){
       this.targetSelector.add(6, new ActiveTargetGoal<MobEntity>(this, MobEntity.class, 10, true, false, entity -> entity instanceof Monster&& !(entity instanceof ZombifiedPiglinEntity)));
       this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
       this.goalSelector.add(8, new LookAroundGoal(this));
-      this.goalSelector.add(4, new FollowOwnerGoal(this, 1.0, 10.0f, 3.0f, false));
+      this.goalSelector.add(4, new FollowOwnerGoal(this, 1.5, 10.0f, 2.0f, false));
       this.goalSelector.add(1, new SitGoal(this));
       this.goalSelector.add(3, new ProjectileAttackGoal(this, 1.25, 20, 30.0f));
       this.goalSelector.add(0, new SwimGoal(this));
@@ -89,10 +91,9 @@ protected void initGoals(){
     public static DefaultAttributeContainer.Builder createSpectatorAttributes(){
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 200)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.15f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15f)
+                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.2f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 0.5f)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 15);
 
     }
@@ -156,10 +157,18 @@ protected void initGoals(){
         return stack.isOf(Items.DIAMOND);
     }
 
-    @Nullable
+
+
     @Override
-    public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
-        return ModEntities.SPECTATOR.create(world);
+    @Nullable
+    public PassiveEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
+        UUID uUID;
+        SpectatorEntity spectatorEntity = ModEntities.SPECTATOR.create(serverWorld);
+        if (spectatorEntity != null && (uUID = this.getOwnerUuid()) != null) {
+            spectatorEntity.setOwnerUuid(uUID);
+            spectatorEntity.setTamed(true);
+        }
+        return spectatorEntity;
     }
 
     @Override
@@ -183,6 +192,8 @@ protected void initGoals(){
                     this.getWorld().sendEntityStatus(this,(byte)7);
                     setSitting(true);
                     setInSittingPose(true);
+
+
                 }
             }
                 if (this.isTamed()) {
