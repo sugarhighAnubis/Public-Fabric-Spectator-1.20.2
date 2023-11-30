@@ -85,6 +85,7 @@ protected void initGoals(){
       this.goalSelector.add(0, new SwimGoal(this));
       this.goalSelector.add(0, new AttackWithOwnerGoal(this));
       this.goalSelector.add(9, new WanderAroundFarGoal(this, 1.0));
+      this.targetSelector.add(6, (new RevengeGoal(this, new Class[0])).setGroupRevenge(new Class[0]));
     }
 
 
