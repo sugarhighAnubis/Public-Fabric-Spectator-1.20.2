@@ -247,7 +247,7 @@ protected void initGoals(){
         double e = target.getX() - this.getX();
         double f = d - shockwaveEntity.getY();
         double g = target.getZ() - this.getZ();
-        double h = Math.sqrt(e * e + g * g) * (double) 0.2f;
+        double h = Math.sqrt(e * e + g * g) * (double) 0.1f;
         shockwaveEntity.setVelocity(e, f + h, g, 1.6f, 0.0f);
         this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0f, 0.4f / (this.getRandom().nextFloat() * 0.4f + 0.8f));
         this.getWorld().spawnEntity(shockwaveEntity);
